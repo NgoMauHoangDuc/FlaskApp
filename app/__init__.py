@@ -54,5 +54,7 @@ def create_app():
     for bp in blueprints: app.register_blueprint(bp)
 
     app.cli.add_command(create_admin_user)
+    with app.app_context():
+        db.create_all()
 
     return app
