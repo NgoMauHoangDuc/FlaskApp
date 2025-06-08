@@ -1,5 +1,4 @@
 name: Deploy FlaskApp via Docker to Droplet
-
 on:
   push:
     branches:
