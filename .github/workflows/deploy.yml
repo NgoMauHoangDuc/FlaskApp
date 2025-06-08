@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
-        ports:
-          - "80:5000"  
 
       - name: Deploy via SSH and Docker Compose
         uses: appleboy/ssh-action@v0.1.7
