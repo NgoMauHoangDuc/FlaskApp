@@ -1,0 +1,33 @@
+name: Deploy FlaskApp via Docker to Droplet
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to DigitalOcean Droplet
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        ports:
+          - "80:5000"  
+
+      - name: Deploy via SSH and Docker Compose
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /opt/flaskapp || mkdir -p /opt/flaskapp && cd /opt/flaskapp
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/NgoMauHoangDuc/FlaskApp.git .
+            else
+              git pull origin main
+            fi
+            docker-compose down
+            docker-compose up -d --build
